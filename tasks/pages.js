@@ -14,6 +14,7 @@ var _ = require('lodash');
 var jsYAML = require('js-yaml');
 var marked = require('marked');
 var pygmentize = require('pygmentize-bundled');
+var moment = require('moment');
 require('colors');
 
 var templateEngines = {
@@ -82,7 +83,7 @@ module.exports = function (grunt) {
 
         // Once all the source posts are parsed, we can generate the html posts
         if (++parsedPosts === numPosts) {
-          var templateData = { posts: postCollection };
+          var templateData = { posts: postCollection, moment: moment };
 
           if (options.data) {
             setData(templateData);
@@ -331,7 +332,8 @@ module.exports = function (grunt) {
       pageUrls[pageNumber].currentPage = true;
       grunt.file.write(pageDests[pageNumber], fn({
         pages: pageUrls,
-        posts: postGroup
+        posts: postGroup,
+        moment: moment
       }));
       delete pageUrls[pageNumber].currentPage;
       grunt.log.ok('Created '.green + 'paginated'.rainbow + ' page'.magenta + ' at: ' + pageDests[pageNumber]);
